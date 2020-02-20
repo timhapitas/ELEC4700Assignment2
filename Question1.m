@@ -2,7 +2,7 @@ L = 30;
 W = 20;
 meshSize = 1;
 V_o = 1;
-seriesTermCount = 200;
+seriesTermCount = 300;
 
 nx = L/meshSize;
 ny = W/meshSize;
@@ -53,6 +53,10 @@ end
 
 figure;
 surf(V_2D);
+title('Voltage Throughout the Region (Unfixed Top and Bottom BCs)');
+xlabel('x-Direction');
+ylabel('y-Direction');
+zlabel('Electric Potential (V)');
 
 %1 b)%
 
@@ -104,7 +108,11 @@ V = G\B;
 V = reshape(V, [nx ny]);
 
 figure;
-surf(V)
+surf(V);
+title('Voltage Throughout the Region Obtained from Numerical Solution of \nabla^2V = 0');
+xlabel('x-Direction');
+ylabel('y-Direction');
+zlabel('Electric Potential (V)');
 
 %Define Analytical Series Solution
 
@@ -118,12 +126,17 @@ for xval = 1:length(x)
     for yval = 1:length(y)
         for k = 1:2:seriesTermCount
                             
-            V_an(xval,yval) = V_an(xval,yval) + seriesSolution(xval - (L)/2,yval,k);
+            V_an(xval,yval) = V_an(xval,yval) + seriesSolution(x(xval) - (L)/2,y(yval),k);
                        
         end  
     end   
 end
-   
-figure;
+
 [Y,X] = meshgrid(y,x);
+
+figure;
 surf(X, Y, V_an);
+title('Voltage Throughout the Region Given by the Analytical Series Solution of \nabla^2V = 0');
+xlabel('x-Direction');
+ylabel('y-Direction');
+zlabel('Electric Potential (V)');
