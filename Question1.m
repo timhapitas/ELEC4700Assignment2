@@ -7,22 +7,22 @@ seriesTermCount = 300;
 nx = L/meshSize;
 ny = W/meshSize;
 
+% -------------- 1 a)  -------------- %
+
 G = sparse(nx, nx);
 B = zeros(nx, 1);
 V_2D = zeros(ny, nx);
 
-%Construction of discrete Laplace operator and solution vector
+%Construction of discrete Laplace operator and solution vector (1D)
     
 for i = 1:nx %i counts x coordinate
        
-       %mapping from mesh space to equation space
-       
+       %mapping from position space to equation space
        n = i;
        nxm = i - 1;
        nxp = i + 1;
        
        %implement boundary conditions
-        
        if (i == 1)
            
            G(n,n) = 1;
@@ -31,8 +31,7 @@ for i = 1:nx %i counts x coordinate
        elseif (i == nx)
            
            G(n,n) = 1;
-   
-       %construct discrete Laplace operator    
+    
        else
            
            G(n,n) = -2/meshSize;
@@ -51,6 +50,7 @@ for count = 1:ny
     
 end
 
+%plot of numerical solution
 figure;
 surf(V_2D);
 title('Voltage Throughout the Region (Unfixed Top and Bottom BCs)');
@@ -58,12 +58,13 @@ xlabel('x-Direction');
 ylabel('y-Direction');
 zlabel('Electric Potential (V)');
 
-%1 b)%
+% -------------- 1 b)  -------------- %
 
 G = sparse(nx*ny, nx*ny);
 B = zeros(nx*ny, 1);
 
 %Construction of discrete Laplace operator and solution vector
+
 for j = 1:ny %j counts y coordinate
     
    for i = 1:nx %i counts x coordinate
@@ -88,8 +89,7 @@ for j = 1:ny %j counts y coordinate
            G(n,:) = 0;
            G(n,n) = 1;
            B(n) = V_o;
-   
-       %construct discrete Laplace operator    
+     
        else
            
            G(n,n) = -4/meshSize;
@@ -103,19 +103,12 @@ for j = 1:ny %j counts y coordinate
    end
     
 end
- 
+
+%Solve the equivalent matrix problem
 V = G\B;
 V = reshape(V, [nx ny]);
 
-figure;
-surf(V);
-title('Voltage Throughout the Region Obtained from Numerical Solution of \nabla^2V = 0');
-xlabel('x-Direction');
-ylabel('y-Direction');
-zlabel('Electric Potential (V)');
-
 %Define Analytical Series Solution
-
 x = linspace(0, L, nx);
 y = linspace(0, W, ny);
 V_an = zeros(length(x), length(y));
@@ -132,11 +125,27 @@ for xval = 1:length(x)
     end   
 end
 
+%meshgrid for plotting analytical solution
 [Y,X] = meshgrid(y,x);
 
+%plot of numerical solution
+figure;
+surf(V);
+title('Voltage Throughout the Region Obtained from Numerical Solution of \nabla^2V = 0');
+xlabel('y-Direction');
+ylabel('x-Direction');
+zlabel('Electric Potential (V)');
+xlim([1 W]);
+ylim([1 L]);
+
+
+%plot of analytical solution
 figure;
 surf(X, Y, V_an);
 title('Voltage Throughout the Region Given by the Analytical Series Solution of \nabla^2V = 0');
 xlabel('x-Direction');
 ylabel('y-Direction');
 zlabel('Electric Potential (V)');
+xlim([0 L]);
+ylim([0 W]);
+zlim([0 V_o]);

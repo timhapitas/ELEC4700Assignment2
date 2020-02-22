@@ -1,11 +1,15 @@
-function [currentTop, currentBot] = Question2(meshSize, backgroundCond, boxCond, doPlot)
+function [cMap] = Question2(meshSize, backgroundCond, boxCond)
+
+meshSize = 0.5;
 
 L = 20;
 W = 40;
 
-nx = round(L/meshSize);
-ny = round(W/meshSize);
+nx = L/meshSize;
+ny = W/meshSize;
 
+backgroundCond = 1;
+boxCond = 1e-2;
 V_o = 10;
 
 cMap = buildConductionMap(L, W, meshSize, nx, ny, backgroundCond, boxCond);
@@ -108,43 +112,39 @@ currentTop = abs(sum(Jy(ny,:))*meshSize);
 currentBot = abs(sum(Jy(1,:))*meshSize);
 
 % plots
+figure;
+surf(cMap);
+title('Electrical Conductivity Throughout the Region of Interest');
+xlabel('x-Direction (number of mesh steps)');
+ylabel('y-Direction (number of mesh steps)');
+zlabel('Conductivity (\Omega^{-1})');
+xlim([1 nx]);
+ylim([1 ny]);
+
+figure;
+surf(V);
+title('Potential Throughout the Region');
+xlabel('x-Direction (number of mesh steps)');
+ylabel('y-Direction (number of mesh steps)');
+zlabel('Electric Potential (V)');
+xlim([1 nx]);
+ylim([1 ny]);
+
+figure;
+quiver(Ex, Ey);
+title('Electric Field Throughout the Region (V/m)');
+xlabel('x-Direction (number of mesh steps)');
+ylabel('y-Direction (number of mesh steps)');
+xlim([1 nx]);
+ylim([1 ny]);
+
+figure;
+quiver(Jx, Jy);
+title('Current Density Throughout the Region (A/m^2)');
+xlabel('x-Direction (number of mesh steps)');
+ylabel('y-Direction (number of mesh steps)');
+xlim([1 nx]);
+ylim([1 ny]);
 
 
-if doPlot
-    
-    figure;
-    surf(cMap);
-    title('Electrical Conductivity Throughout the Region of Interest');
-    xlabel('x-Direction (number of mesh steps)');
-    ylabel('y-Direction (number of mesh steps)');
-    zlabel('Conductivity (\Omega^{-1})');
-    xlim([1 nx]);
-    ylim([1 ny]);
-
-    figure;
-    surf(V);
-    title('Potential Throughout the Region');
-    xlabel('x-Direction (number of mesh steps)');
-    ylabel('y-Direction (number of mesh steps)');
-    zlabel('Electric Potential (V)');
-    xlim([1 nx]);
-    ylim([1 ny]);
-
-    figure;
-    quiver(Ex, Ey);
-    title('Electric Field Throughout the Region (V/m)');
-    xlabel('x-Direction (number of mesh steps)');
-    ylabel('y-Direction (number of mesh steps)');
-    xlim([1 nx]);
-    ylim([1 ny]);
-
-    figure;
-    quiver(Jx, Jy);
-    title('Current Density Throughout the Region (A/m^2)');
-    xlabel('x-Direction (number of mesh steps)');
-    ylabel('y-Direction (number of mesh steps)');
-    xlim([1 nx]);
-    ylim([1 ny]);
-
-end
 
