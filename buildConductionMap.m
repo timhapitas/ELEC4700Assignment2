@@ -1,10 +1,13 @@
-function [cMap] = buildConductionMap(L, W, meshSize, nx, ny, backgroundCond, boxCond)
+function [cMap] = buildConductionMap(L, W, meshSize, nx, ny, backgroundCond, boxCond, bottleneckLength, bottleneckWidth)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
+%bottleneckLength and bottleneckWidth are defined as fractions of the total
+%region length and width.
+
 cMap = zeros(ny, nx);
-boxL = L/3;
-boxH = W/3;
+boxL = bottleneckLength*L;
+boxH = bottleneckWidth*W;
 boxXstart = ((L/3)/meshSize);
 boxXfinish = boxXstart + boxL/meshSize;
 boxYstart = 0;

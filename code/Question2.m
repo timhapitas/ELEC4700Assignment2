@@ -1,4 +1,4 @@
-function [currentTop, currentBot] = Question2(meshSize, backgroundCond, boxCond, doPlot)
+function [currentLeft, currentRight] = Question2(meshSize, backgroundCond, boxCond, doPlot, bottleneckLength, bottleneckWidth)
 
 L = 20;
 W = 40;
@@ -6,9 +6,9 @@ W = 40;
 nx = round(L/meshSize);
 ny = round(W/meshSize);
 
-V_o = 10;
+V_o = 5;
 
-cMap = buildConductionMap(L, W, meshSize, nx, ny, backgroundCond, boxCond);
+cMap = buildConductionMap(L, W, meshSize, nx, ny, backgroundCond, boxCond, bottleneckLength, bottleneckWidth);
 
 
 G = sparse(nx*ny, nx*ny);
@@ -104,8 +104,8 @@ Jy = cMap.*Ey;
 
 % numerical approximation of surface integral of J at the top and bottom
 % contacts
-currentTop = abs(sum(Jy(ny,:))*meshSize);
-currentBot = abs(sum(Jy(1,:))*meshSize);
+currentLeft = -abs(sum(Jx(:,1))*meshSize);
+currentRight = abs(sum(Jx(:,nx))*meshSize);
 
 % plots
 
